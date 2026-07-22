@@ -1,73 +1,69 @@
 #!/usr/bin/env python3
-"""Bake the public Selby legacy-stock page.
+"""Bake the public Selby stock-clearance page.
 
-Reads the scheduler's Selby inventory export + master catalogue, keeps only
-legacy items (flagged discontinued in the master, OR newest model-year
-coverage ended 2010 or earlier), and writes a fully self-contained
-index.html — data embedded, no server, no login, nothing shared with the
-scheduler. Refreshing the public list after a new inventory export is:
+Source of truth is the emailed clearance list, `selby-inventory.xlsx` in this
+folder (columns: Bin Location, Item Code, Item Description, System Qty).
+EVERY item on it with qty > 0 goes on the page — no legacy/year filtering;
+the list itself is the decision of what's offered. Bin locations stay
+private (the xlsx is gitignored; only the baked index.html is published).
 
-    python3 build.py && git add -A && git commit -m "stock refresh" && git push
+The scheduler's master catalogue is used only to enrich rows with SX codes,
+departments (for the glass-type filter) and discontinued tags.
+
+Refreshing after a new list:
+
+    cp ~/Downloads/"Selby Inventory .xlsx" selby-inventory.xlsx
+    python3 build.py
+    git add -A && git commit -m "stock refresh" && git push
 """
 import base64
 import csv
 import datetime
 import json
 import os
-import re
+
+import openpyxl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCHEDULER = os.path.join(HERE, "..", "fitment-scheduler")
-INVENTORY = os.path.join(SCHEDULER, "catalogue", "selby-inventory.csv")
-MASTER = os.path.join(SCHEDULER, "catalogue", "master-stock.csv")
-LOGO = os.path.join(SCHEDULER, "public", "myglass-logo.png")
-
-# An item is "legacy" when the supplier has dropped the code, or the newest
-# vehicle it fits went out of production in 2010 or earlier.
-LEGACY_YEAR_CUTOFF = 2010
-
-
-def end_year(desc):
-    ys = []
-    for m in re.finditer(r"\b(\d{2})-(\d{2})?(?!\d)", desc):
-        e = m.group(2)
-        if e is None:
-            return 9999  # open-ended range: still-current model
-        e = int(e)
-        e += 1900 if e >= 40 else 2000
-        ys.append(e)
-    return max(ys) if ys else None
+SOURCE = os.path.join(HERE, "selby-inventory.xlsx")
+MASTER = os.path.join(HERE, "..", "fitment-scheduler", "catalogue", "master-stock.csv")
+LOGO = os.path.join(HERE, "..", "fitment-scheduler", "public", "myglass-logo.png")
 
 
 def main():
     master = {r["wd_code"].strip().lower(): r
               for r in csv.DictReader(open(MASTER, newline="", encoding="utf-8-sig"))}
+    ws = openpyxl.load_workbook(SOURCE, data_only=True).worksheets[0]
+    header = [str(c or "").strip().lower() for c in next(ws.iter_rows(min_row=1, max_row=1, values_only=True))]
+    col = {name: header.index(name) for name in ("item code", "item description", "system qty")}
+
     items = []
-    for r in csv.DictReader(open(INVENTORY, newline="", encoding="utf-8-sig")):
-        code = (r.get("code") or "").strip()
-        desc = (r.get("description") or "").strip()
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        code = row[col["item code"]]
+        if code is None:
+            continue
+        # Numeric codes come back as ints/floats; 1028.0 must publish as "1028"
+        code = str(int(code)) if isinstance(code, (int, float)) else str(code).strip()
+        desc = str(row[col["item description"]] or "").strip()
         try:
-            qty = int(float((r.get("qty") or "0").strip() or 0))
-        except ValueError:
+            qty = int(float(row[col["system qty"]] or 0))
+        except (TypeError, ValueError):
             qty = 0
         if not code or not desc or qty <= 0:
             continue
         m = master.get(code.lower(), {})
-        disc = (m.get("discontinued") or "").strip() in ("1", "yes", "true")
-        if not disc and (end_year(desc) or 9999) > LEGACY_YEAR_CUTOFF:
-            continue  # still-current stock stays private
         items.append({
             "code": code,
             "sx": (m.get("sx_code") or "").strip(),
             "desc": desc,
             "qty": qty,
             "dept": (m.get("department") or "").strip(),
-            "disc": disc,
+            "disc": (m.get("discontinued") or "").strip() in ("1", "yes", "true"),
         })
     items.sort(key=lambda i: i["desc"])
 
     logo = base64.b64encode(open(LOGO, "rb").read()).decode()
-    updated = datetime.date.fromtimestamp(os.path.getmtime(INVENTORY)).strftime("%-d %B %Y")
+    updated = datetime.date.fromtimestamp(os.path.getmtime(SOURCE)).strftime("%-d %B %Y")
 
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     html = (tpl
