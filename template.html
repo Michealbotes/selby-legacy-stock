@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legacy &amp; Discontinued Glass Stock — My Glass Selby</title>
+<style>
+  :root {
+    --lime: #c4d600;
+    --bg: #f5f6f2;
+    --panel: #ffffff;
+    --border: #dfe3d8;
+    --text: #23281e;
+    --muted: #6b7263;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  header {
+    background: #1d2118; color: #fff; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 4px solid var(--lime);
+  }
+  header img { height: 38px; }
+  header h1 { font-size: 1.1rem; margin: 0; font-weight: 600; }
+  header .sub { color: #b9bfae; font-size: 0.8rem; margin-top: 2px; }
+  main { max-width: 1000px; margin: 0 auto; padding: 18px 16px 50px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px; margin-bottom: 16px;
+  }
+  .card h2 { margin: 0 0 6px; font-size: 1.02rem; display: flex; align-items: center; gap: 10px; }
+  .hint { color: var(--muted); font-size: 0.85rem; margin: 6px 0 0; }
+  .search-row { display: flex; gap: 10px; margin-top: 12px; }
+  .search-row input, .search-row select {
+    padding: 10px 12px; font-size: 1rem;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+  }
+  .search-row input { flex: 1; min-width: 0; }
+  .search-row input:focus, .search-row select:focus { outline: 2px solid var(--lime); border-color: transparent; }
+  button.primary {
+    background: var(--lime); border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 1rem; font-weight: 600; color: #23281e; cursor: pointer;
+  }
+  button.primary:hover { filter: brightness(0.95); }
+  .count {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 999px;
+    padding: 1px 10px; font-size: 0.8rem; font-weight: 600; color: var(--muted);
+  }
+  .note { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; }
+  table.stock { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.9rem; }
+  table.stock th {
+    text-align: left; color: var(--muted); font-weight: 600;
+    padding: 6px 10px; border-bottom: 2px solid var(--border); white-space: nowrap;
+  }
+  table.stock td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.stock tr:last-child td { border-bottom: none; }
+  td.code { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.sx { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.qty { white-space: nowrap; font-weight: 600; color: #1a7f37; text-align: right; }
+  .tag-disc {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.03em;
+    color: #8a4b12; background: #fdf1e7; border: 1px solid #f0cba5;
+    border-radius: 4px; padding: 0 5px; margin-left: 6px; vertical-align: middle;
+  }
+  .contact {
+    background: #eef3d4; border: 1px solid #cdd98a; border-radius: 10px;
+    padding: 14px 20px; margin-bottom: 16px; font-size: 0.95rem;
+  }
+  .contact a { color: #4a5a10; font-weight: 600; }
+  footer { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 10px 16px 30px; }
+  .table-wrap { overflow-x: auto; }
+  @media (max-width: 700px) {
+    .search-row { flex-direction: column; }
+    table.stock th:nth-child(2), table.stock td:nth-child(2) { display: none; }
+    table.stock { font-size: 0.82rem; }
+    table.stock th, table.stock td { padding: 6px 6px; }
+    .tag-disc { display: block; margin: 2px 0 0; width: fit-content; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <img src="data:image/png;base64,__LOGO__" alt="My Glass" />
+    <div>
+      <h1>Legacy &amp; Discontinued Glass Stock</h1>
+      <div class="sub">My Glass Selby, Johannesburg &mdash; available to the trade while stocks last</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="contact">
+      <strong>To confirm availability or reserve stock</strong>, contact My Glass Selby and
+      quote the part code &mdash; <a href="mailto:michaelb@myglass.co.za">michaelb@myglass.co.za</a>.
+      Quantities are a snapshot dated <strong>__UPDATED__</strong> and are not a guarantee of availability.
+    </div>
+
+    <div class="card">
+      <h2>Search this list</h2>
+      <p class="hint">
+        Vehicle and year (<em>Toyota Hilux 1998 windscreen</em>), a part code
+        (<em>1067</em>), or anything else. Leave the box empty to browse everything.
+        This page only searches stock physically on the shelf at Selby.
+      </p>
+      <div class="search-row">
+        <select id="type" aria-label="Glass type">
+          <option value="">Any type</option>
+          <option value="windscreen">Windscreen</option>
+          <option value="door">Door glass</option>
+          <option value="rearlight">Rearlight</option>
+          <option value="other">Other</option>
+        </select>
+        <input id="q" type="text" placeholder="e.g. Ford Escort 1996, or code 1067" autocomplete="off" />
+        <button id="go" class="primary">Search</button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </main>
+
+  <footer>
+    Legacy stock list &middot; __COUNT__ line items &middot; updated __UPDATED__ &middot;
+    &copy; My Glass Selby
+  </footer>
+
+  <script>
+    const ITEMS = __ITEMS__;
+
+    // Same search behaviour as the office's own stock finder: trade make
+    // abbreviations, part-name aliases, department narrowing, year ranges.
+    const PHRASE_ALIASES = {
+      "land rover": "lr", "alfa romeo": "al", "great wall": "gwm",
+      "mercedes benz": "bz", "mercedes-benz": "bz",
+      "front door": "fd", "rear door": "rd", "rear quarter": "rq",
+      "quarter glass": "rq", "rear vent": "rv", "vent glass": "rv",
+      "cab glass": "cab glass", "rear window": "rearlite", "back glass": "rearlite",
+      "right hand": "rh", "left hand": "lh", "driver side": "rh", "passenger side": "lh",
+    };
+    const MAKE_ALIASES = {
+      toyota: "ty", volkswagen: "vw", nissan: "ns", ford: "fd",
+      hyundai: "hy", mercedes: "bz", merc: "bz", benz: "bz",
+      opel: "op", honda: "hd", suzuki: "sz", renault: "rn",
+      isuzu: "iz", mazda: "mz", chevrolet: "ch", chev: "ch",
+      audi: "ad", mitsubishi: "mb", fiat: "ft", tata: "ta",
+      landrover: "lr", rover: "lr", peugeot: "pg", daihatsu: "dh",
+      mahindra: "mh", alfa: "al", citroen: "ct", chrysler: "cr",
+      subaru: "sb", volvo: "vv", daewoo: "dw",
+      right: "rh", left: "lh", bakkie: "ldv", hatchback: "hbk",
+      hatch: "hbk", sedan: "sed", wagon: "sw",
+    };
+    const STOPWORDS = new Set(["windscreen", "windshield", "screen", "glass", "door",
+      "window", "a", "the", "for", "of", "please", "need"]);
+    const DEPT_WORDS = {
+      windscreen: "WINDSCREENS", windshield: "WINDSCREENS", screen: "WINDSCREENS",
+      door: "SIDE GLASSES", side: "SIDE GLASSES",
+      rearlite: "REARLITES", rearlight: "REARLITES",
+      slider: "CAB SLIDERS",
+    };
+    const TYPE_DEPTS = {
+      windscreen: ["WINDSCREENS"],
+      door: ["SIDE GLASSES"],
+      rearlight: ["REARLITES"],
+    };
+    const MAIN_DEPTS = new Set(["WINDSCREENS", "SIDE GLASSES", "REARLITES"]);
+
+    ITEMS.forEach((i) => { i._hay = (i.code + " " + i.sx + " " + i.desc).toLowerCase(); });
+
+    const resultsEl = document.getElementById("results");
+    const qEl = document.getElementById("q");
+    const typeEl = document.getElementById("type");
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      }[c]));
+    }
+    function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+    function typeAllows(dept, type) {
+      if (!type) return true;
+      if (type === "other") return !MAIN_DEPTS.has(dept);
+      return (TYPE_DEPTS[type] || []).includes(dept);
+    }
+
+    function yearRanges(text) {
+      const ranges = [];
+      for (const m of text.matchAll(/\b(\d{2})-(\d{2})?(?!\d)/g)) {
+        let start = parseInt(m[1], 10);
+        start += start >= 40 ? 1900 : 2000;
+        let end;
+        if (m[2] !== undefined) {
+          end = parseInt(m[2], 10);
+          end += end >= 40 ? 1900 : 2000;
+        } else end = 9999;
+        if (end >= start) ranges.push([start, end]);
+      }
+      return ranges;
+    }
+
+    function queryTerms(query) {
+      let q = query.toLowerCase();
+      for (const [phrase, code] of Object.entries(PHRASE_ALIASES)) q = q.split(phrase).join(code);
+      let year = null, department = null;
+      const terms = [];
+      for (const token of q.match(/[a-z0-9]+/g) || []) {
+        if (/^(19|20)\d{2}$/.test(token)) { year = parseInt(token, 10); continue; }
+        if (DEPT_WORDS[token]) department = DEPT_WORDS[token];
+        if (STOPWORDS.has(token)) continue;
+        terms.push(MAKE_ALIASES[token] || token);
+      }
+      return { terms, year, department };
+    }
+
+    function search(query, type) {
+      const q = query.trim().toLowerCase();
+      if (!q) return ITEMS.filter((i) => typeAllows(i.dept, type));
+      // Code-like entry: every item sharing the leading digits, plus exact SX hits
+      if (/^\d[0-9a-z-]*$/.test(q)) {
+        const m = q.match(/^\d{4,}/);
+        const base = m ? m[0] : q;
+        const family = ITEMS.filter((i) =>
+          (i.code.toLowerCase().startsWith(base) || i.sx.toLowerCase() === q)
+          && typeAllows(i.dept, type));
+        if (family.length) {
+          family.sort((a, b) =>
+            (a.code.toLowerCase() !== q && a.sx.toLowerCase() !== q) -
+            (b.code.toLowerCase() !== q && b.sx.toLowerCase() !== q)
+            || a.code.localeCompare(b.code));
+          return family;
+        }
+      }
+      const { terms, year, department } = queryTerms(query);
+      if (!terms.length && !year) return [];
+      const res = [];
+      for (const i of ITEMS) {
+        if (!typeAllows(i.dept, type)) continue;
+        if (department && !type && i.dept !== department) continue;
+        if (!terms.every((t) => new RegExp("\\b" + escRe(t)).test(i._hay))) continue;
+        let yearHit = false;
+        if (year) {
+          const ranges = yearRanges(i.desc);
+          if (ranges.length && !ranges.some(([a, b]) => year >= a && year <= b)) continue;
+          yearHit = ranges.length > 0;
+        }
+        res.push([yearHit ? 0 : 1, i.desc, i]);
+      }
+      res.sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1]));
+      return res.map((r) => r[2]);
+    }
+
+    function render() {
+      const hits = search(qEl.value, typeEl.value);
+      if (!hits.length) {
+        resultsEl.innerHTML = `<div class="card"><h2>No matches</h2>
+          <p class="note">Nothing on the legacy list matches that. Try the vehicle and
+          year on their own (e.g. <em>Escort 1996</em>), a part code, or set the glass
+          type to <em>Any type</em>. Only stock on the shelf at Selby is listed here.</p></div>`;
+        return;
+      }
+      const browsing = !qEl.value.trim();
+      const rows = hits.map((i) => `
+        <tr>
+          <td class="code">${esc(i.code)}${i.disc ? ' <span class="tag-disc">discontinued</span>' : ""}</td>
+          <td class="sx">${esc(i.sx)}</td>
+          <td>${esc(i.desc)}</td>
+          <td class="qty">${i.qty}</td>
+        </tr>`).join("");
+      resultsEl.innerHTML = `
+        <div class="card">
+          <h2>${browsing ? "All legacy stock" : "Matches"} <span class="count">${hits.length}</span></h2>
+          <div class="table-wrap"><table class="stock">
+            <thead><tr><th>WD code</th><th>SX code</th><th>Fits</th><th style="text-align:right">On shelf</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table></div>
+        </div>`;
+    }
+
+    document.getElementById("go").addEventListener("click", render);
+    qEl.addEventListener("keydown", (e) => { if (e.key === "Enter") render(); });
+    qEl.addEventListener("input", () => { if (!qEl.value.trim()) render(); });
+    typeEl.addEventListener("change", render);
+    render();
+    qEl.focus();
+  </script>
+</body>
+</html>
