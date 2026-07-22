@@ -29,6 +29,10 @@ SOURCE = os.path.join(HERE, "selby-inventory.xlsx")
 MASTER = os.path.join(HERE, "..", "fitment-scheduler", "catalogue", "master-stock.csv")
 LOGO = os.path.join(HERE, "..", "fitment-scheduler", "public", "myglass-logo.png")
 
+# Not offered to other centres (Micheal, 2026-07-22) — survives list refreshes
+EXCLUDE_CODES = {"104270", "19-0422", "WT01"}
+EXCLUDE_DESC_PREFIXES = ("WB FLAT", "WB STD")
+
 
 def main():
     master = {r["wd_code"].strip().lower(): r
@@ -50,6 +54,8 @@ def main():
         except (TypeError, ValueError):
             qty = 0
         if not code or not desc or qty <= 0:
+            continue
+        if code in EXCLUDE_CODES or desc.upper().startswith(EXCLUDE_DESC_PREFIXES):
             continue
         m = master.get(code.lower(), {})
         items.append({
