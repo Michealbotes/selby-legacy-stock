@@ -1,2 +1,4 @@
 selby-inventory.xlsx
 *.xlsx
+.claude/
+last-removed.json

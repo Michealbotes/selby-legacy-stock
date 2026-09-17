@@ -66,6 +66,11 @@
     color: #8a4b12; background: #fdf1e7; border: 1px solid #f0cba5;
     border-radius: 4px; padding: 0 5px; margin-left: 6px; vertical-align: middle;
   }
+  .tag-x {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    color: #23281e; background: var(--lime); border: 1px solid #a8b800;
+    border-radius: 4px; padding: 0 6px; margin-left: 6px; vertical-align: middle;
+  }
   .contact {
     background: #eef3d4; border: 1px solid #cdd98a; border-radius: 10px;
     padding: 14px 20px; margin-bottom: 16px; font-size: 0.95rem;
@@ -114,7 +119,7 @@
       <p class="hint">
         Vehicle and year (<em>Toyota Hilux 1998 windscreen</em>), a part code
         (<em>1067</em>), or anything else. Leave the box empty to browse everything.
-        This page only searches stock physically on the shelf at Selby.
+        This page only searches our own stock on the shelf.
       </p>
       <div class="search-row">
         <select id="type" aria-label="Glass type">
@@ -274,7 +279,7 @@
       const browsing = !qEl.value.trim();
       const rows = hits.map((i) => `
         <tr>
-          <td class="code">${esc(i.code)}${i.disc ? ' <span class="tag-disc">discontinued</span>' : ""}</td>
+          <td class="code">${esc(i.code)}${i.x ? ' <span class="tag-x">X</span>' : ""}${i.disc ? ' <span class="tag-disc">discontinued</span>' : ""}</td>
           <td class="sx">${esc(i.sx)}</td>
           <td>${esc(i.desc)}</td>
           <td class="qty">${i.qty}</td>

@@ -1,23 +1,34 @@
 # Selby clearance stock — public list
 
-Public, read-only list of clearance glass stock on the shelf at My Glass
-Selby, for other fitment centres. Completely separate from the fitment
-scheduler: no server, no database, no logins — one static page with the
-stock list baked in.
+Public, read-only list of clearance glass stock offered by My Glass Selby
+to other fitment centres. Completely separate from the fitment scheduler:
+no server, no database, no logins — one static page with the stock list
+baked in.
 
 Live at: https://michealbotes.github.io/selby-legacy-stock/
 
-## Refreshing after a new stock list
+## Refreshing
 
-The source of truth is `selby-inventory.xlsx` in this folder (the emailed
-clearance list: Bin Location, Item Code, Item Description, System Qty).
-Every item on it with qty > 0 is published — no filtering; the list itself
-decides what's offered. Bin locations never reach the page, and the xlsx is
-gitignored so it stays off the public repo.
+Three gitignored spreadsheets next to `build.py` are the sources (bin
+locations, costs and prices never reach the page or this repo):
 
-    cp ~/Downloads/"Selby Inventory .xlsx" selby-inventory.xlsx
+- `selby-inventory.xlsx` — the emailed Selby clearance list; defines which
+  Selby items are offered. Nothing is ever added from the on-hand file.
+- `selby-on-hand.xlsx` — live-Xero stock-on-hand export; offered items
+  missing from it are removed, kept items take its current quantity.
+- `x-stock.xlsx` — the second stock list; its rows are marked with an X
+  on the page.
+
+Copy the new export(s) over the file(s) above, then:
+
     python3 build.py
-    git add -A && git commit -m "stock refresh" && git push
+    git add index.html
+    git commit -m "stock refresh" -- index.html
+
+Do NOT push — hand the commit to the deploy session (pushes to this repo
+deploy GitHub Pages).
 
 `build.py` cross-references the scheduler's `master-stock.csv` only to add
 SX codes, departments (for the glass-type filter) and discontinued tags.
+Tools, consumables and wiper blades are kept off the page by the exclusion
+rules at the top of `build.py`.
