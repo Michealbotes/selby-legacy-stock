@@ -5,7 +5,16 @@ to other fitment centres. Completely separate from the fitment scheduler:
 no server, no database, no logins — one static page with the stock list
 baked in.
 
-Live at: https://michealbotes.github.io/selby-legacy-stock/
+Live at: https://stock.oneglass.co.za
+(the old https://michealbotes.github.io/selby-legacy-stock/ still redirects here)
+
+The custom domain is the `CNAME` file in this folder, backed by a CNAME
+record `stock.oneglass.co.za` -> `michealbotes.github.io` in the
+oneglass.co.za zone at domains.co.za. Never push a change to that file
+before the matching DNS record resolves: Pages 301s the github.io URL to
+whatever `CNAME` says, so a wrong or missing record takes the page dark
+for the centres using it. Branding stays My Glass on purpose, despite the
+oneglass.co.za domain.
 
 ## Refreshing
 
